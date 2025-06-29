@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A blog about technology, life, and other things.">
+
+    <!-- This title will be updated by JavaScript -->
+    <title>My Awesome Blog</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Syntax Highlighting Library (Highlight.js) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+    <!-- Markdown Parsing Library (Marked.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+<body class="dark-mode"> <!-- Dark mode is on by default -->
+    <div class="container">
+        <header class="site-header">
+            <a class="site-title" href="#/">My Awesome Blog</a>
+            <div class="header-right">
+                <nav class="site-nav">
+                    <a href="#/">Home</a>
+                    <a href="#/about">About</a>
+                    <a href="#/tags">Tags</a>
+                </nav>
+                <button id="theme-toggle" title="Toggle Theme">🌓</button>
+            </div>
+        </header>
+
+        <!-- All content will be dynamically injected here by app.js -->
+        <main id="content">
+            <!-- Loading indicator -->
+            <p>Loading...</p>
+        </main>
+
+        <footer class="site-footer">
+            <p>© <span id="copyright-year"></span> Marios Pitsiali. Hosted on <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+        </footer>
+    </div>
+
+    <!-- Our JavaScript (posts must be loaded before the app) -->
+    <script src="assets/js/posts.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
