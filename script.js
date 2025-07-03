@@ -312,12 +312,12 @@ class MinimalBlog {
   }
 
   initTheme() {
-    const savedTheme = localStorage.getItem("theme") || "light"
+    const savedTheme = localStorage.getItem("theme") || "dark"
     this.setTheme(savedTheme)
   }
 
   toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute("data-theme") || "light"
+    const currentTheme = document.documentElement.getAttribute("data-theme") || "dark"
     const newTheme = currentTheme === "light" ? "dark" : "light"
     this.setTheme(newTheme)
   }
