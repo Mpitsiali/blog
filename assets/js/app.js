@@ -3,6 +3,12 @@
 // --- CONFIGURATION ---
 const postsPerPage = 5; // Adjust this for how many posts to show per page
 const siteTitle = "My Awesome Blog";
+// NEW: Define your repository name here.
+// If you are hosting at https://username.github.io/, leave this as an empty string "".
+// If you are hosting at https://username.github.io/reponame/, set this to "reponame".
+const repoName = "blog"; // <--- YOUR REPO NAME
+const basePath = repoName ? `/${repoName}/` : "/";
+
 
 // --- DOM ELEMENTS ---
 const content = document.getElementById('content');
@@ -47,23 +53,19 @@ function parseFrontMatter(markdown) {
 // Fetches all post markdown files, parses them, and populates the `allPosts` array.
 async function loadAllPosts() {
     const posts = [];
-
     for (const file of postFiles) {
         try {
-            const response = await fetch(`posts/${file}`);
+            // UPDATED: Prepend the basePath to the fetch URL
+            const response = await fetch(`${basePath}posts/${file}`);
             if (!response.ok) throw new Error(`Could not load ${file}`);
             
+            // ... (rest of the function is the same)
             const markdown = await response.text();
             const { metadata, content } = parseFrontMatter(markdown);
-            
-            // The slug is derived from the filename
             metadata.slug = file.replace('.md', '');
-            
-            // Ensure tags is an array even if not specified in front-matter
             if (!metadata.tags) {
                 metadata.tags = [];
             }
-            
             posts.push({ ...metadata, content });
         } catch (error) {
             console.error(error);
@@ -72,7 +74,6 @@ async function loadAllPosts() {
     // Sort posts by date, newest first
     allPosts = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 }
-
 
 // --- THEME ---
 function applyTheme(theme) {
@@ -188,7 +189,8 @@ function renderAllTagsPage() {
 
 async function renderStaticPage(pageName) {
     try {
-        const response = await fetch(`pages/${pageName}.md`);
+        // UPDATED: Prepend the basePath to the fetch URL
+        const response = await fetch(`${basePath}pages/${pageName}.md`);
         if (!response.ok) throw new Error('Page not found');
         const markdown = await response.text();
         const pageHtml = marked.parse(markdown);
@@ -203,7 +205,6 @@ async function renderStaticPage(pageName) {
         document.title = `Not Found | ${siteTitle}`;
     }
 }
-
 
 function renderPagination(currentPage, totalPosts) {
     const totalPages = Math.ceil(totalPosts / postsPerPage);
