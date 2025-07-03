@@ -1,6 +1,6 @@
 // Blog configuration
 const BLOG_CONFIG = {
-  postsPerPage: 6,
+  postsPerPage: 8,
   posts: [
     {
       title: "Welcome to My Blog",
@@ -63,7 +63,7 @@ const BLOG_CONFIG = {
   ],
 }
 
-
+const marked = window.marked
 
 class MinimalBlog {
   constructor() {
@@ -79,7 +79,7 @@ class MinimalBlog {
 
     this.currentPage = 1
     this.currentTag = "all"
-    this.isGridView = true
+    this.isGridView = false // Start with list view
     this.filteredPosts = [...BLOG_CONFIG.posts]
 
     this.init()
@@ -90,7 +90,6 @@ class MinimalBlog {
     this.initTheme()
     this.loadTags()
     this.loadPosts()
-    this.addScrollEffects()
   }
 
   setupEventListeners() {
@@ -103,47 +102,6 @@ class MinimalBlog {
         this.showPostsList()
       }
     })
-
-    // Add smooth scroll to top when navigating
-    window.addEventListener("beforeunload", () => {
-      window.scrollTo(0, 0)
-    })
-  }
-
-  addScrollEffects() {
-    // Add parallax effect to header background
-    window.addEventListener("scroll", () => {
-      const scrolled = window.pageYOffset
-      const headerBg = document.querySelector(".header-background")
-      if (headerBg) {
-        headerBg.style.transform = `skewY(-2deg) translateY(${scrolled * 0.5}px)`
-      }
-    })
-
-    // Add intersection observer for post cards animation
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: "0px 0px -50px 0px",
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = "1"
-          entry.target.style.transform = "translateY(0)"
-        }
-      })
-    }, observerOptions)
-
-    // Observe post cards when they're created
-    this.observePostCards = (cards) => {
-      cards.forEach((card) => {
-        card.style.opacity = "0"
-        card.style.transform = "translateY(20px)"
-        card.style.transition = "opacity 0.6s ease, transform 0.6s ease"
-        observer.observe(card)
-      })
-    }
   }
 
   loadTags() {
@@ -158,7 +116,7 @@ class MinimalBlog {
       .join("")
 
     this.tagsFilter.innerHTML = `
-      <button class="tag-btn active" data-tag="all">All Posts</button>
+      <button class="tag-btn active" data-tag="all">all</button>
       ${tagsHTML}
     `
 
@@ -191,14 +149,8 @@ class MinimalBlog {
 
   toggleView() {
     this.isGridView = !this.isGridView
-    this.viewToggleText.textContent = this.isGridView ? "List View" : "Grid View"
-
-    // Add a small delay for smooth transition
-    this.postsContainer.style.opacity = "0.5"
-    setTimeout(() => {
-      this.loadPosts()
-      this.postsContainer.style.opacity = "1"
-    }, 150)
+    this.viewToggleText.textContent = this.isGridView ? "list view" : "grid view"
+    this.loadPosts()
   }
 
   loadPosts() {
@@ -218,7 +170,7 @@ class MinimalBlog {
     }
 
     const containerClass = this.isGridView ? "posts-grid" : "posts-list"
-    const postsHTML = postsToShow.map((post) => this.createPostCard(post)).join("")
+    const postsHTML = postsToShow.map((post) => this.createPostItem(post)).join("")
 
     this.postsContainer.innerHTML = `
       <div class="${containerClass}">
@@ -226,20 +178,17 @@ class MinimalBlog {
       </div>
     `
 
-    // Add click listeners to post cards
-    const postCards = document.querySelectorAll(".post-card")
-    postCards.forEach((card, index) => {
+    // Add click listeners to post items
+    const postItems = document.querySelectorAll(".post-item, .post-card")
+    postItems.forEach((item, index) => {
       const postIndex = startIndex + index
-      card.addEventListener("click", () => this.openPost(this.filteredPosts[postIndex]))
+      item.addEventListener("click", () => this.openPost(this.filteredPosts[postIndex]))
     })
-
-    // Add scroll animation to new cards
-    this.observePostCards(postCards)
 
     this.loadPagination()
   }
 
-  createPostCard(post) {
+  createPostItem(post) {
     const date = new Date(post.date).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
@@ -248,22 +197,29 @@ class MinimalBlog {
 
     const tagsHTML = post.tags.map((tag) => `<span class="post-tag">${tag}</span>`).join("")
 
-    const listViewClass = this.isGridView ? "" : "list-view"
-
-    return `
-      <div class="post-card ${listViewClass}">
-        <div class="post-info">
-          <div class="post-meta">
-            <div>
-              <h2 class="post-title">${post.title}</h2>
-            </div>
+    if (this.isGridView) {
+      return `
+        <div class="post-card">
+          <div class="post-header">
+            <h2 class="post-title">${post.title}</h2>
             <div class="post-date">${date}</div>
           </div>
           <p class="post-excerpt">${post.excerpt}</p>
           <div class="post-tags">${tagsHTML}</div>
         </div>
-      </div>
-    `
+      `
+    } else {
+      return `
+        <div class="post-item">
+          <div class="post-header">
+            <h2 class="post-title">${post.title}</h2>
+            <div class="post-date">${date}</div>
+          </div>
+          <p class="post-excerpt">${post.excerpt}</p>
+          <div class="post-tags">${tagsHTML}</div>
+        </div>
+      `
+    }
   }
 
   loadPagination() {
@@ -301,7 +257,7 @@ class MinimalBlog {
 
     paginationHTML += `
       <div class="pagination-info">
-        ${startPost}-${endPost} of ${this.filteredPosts.length} posts
+        ${startPost}-${endPost} of ${this.filteredPosts.length}
       </div>
     `
 
@@ -316,7 +272,7 @@ class MinimalBlog {
 
   async openPost(post) {
     this.showPostView()
-    this.postContent.innerHTML = '<div class="loading">Loading post...</div>'
+    this.postContent.innerHTML = '<div class="loading">Loading...</div>'
 
     try {
       const response = await fetch(`posts/${post.file}`)
@@ -327,16 +283,14 @@ class MinimalBlog {
       const markdown = await response.text()
       const html = marked.parse(markdown)
       this.postContent.innerHTML = html
-
-      // Smooth scroll to top
       window.scrollTo({ top: 0, behavior: "smooth" })
     } catch (error) {
       this.postContent.innerHTML = `
         <h1>Post Not Found</h1>
-        <p>Sorry, this post could not be loaded. This might be because the markdown file doesn't exist yet.</p>
+        <p>This post could not be loaded. The markdown file might not exist yet.</p>
         <p><strong>To add this post:</strong></p>
         <ol>
-          <li>Create a file named <code>${post.file}</code> in the <code>posts/</code> directory</li>
+          <li>Create <code>${post.file}</code> in the <code>posts/</code> directory</li>
           <li>Write your content in Markdown format</li>
           <li>Refresh the page</li>
         </ol>
@@ -352,18 +306,18 @@ class MinimalBlog {
 
   showPostsList() {
     this.postView.style.display = "none"
-    document.querySelector(".navigation").style.display = "block"
+    document.querySelector(".navigation").style.display = "flex"
     document.querySelector(".main").style.display = "block"
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   initTheme() {
-    const savedTheme = localStorage.getItem("theme") || "dark"
+    const savedTheme = localStorage.getItem("theme") || "light"
     this.setTheme(savedTheme)
   }
 
   toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute("data-theme") || "dark"
+    const currentTheme = document.documentElement.getAttribute("data-theme") || "light"
     const newTheme = currentTheme === "light" ? "dark" : "light"
     this.setTheme(newTheme)
   }

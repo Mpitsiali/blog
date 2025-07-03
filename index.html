@@ -5,49 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimal Blog</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <div class="grain-overlay"></div>
-    
     <div class="container">
         <header class="header">
-            <div class="header-background"></div>
-            <div class="header-content">
-                <div class="logo-section">
-                    <h1 class="logo">
-                        <span class="logo-icon">◉</span>
-                        Minimal Blog
-                    </h1>
-                    <p class="tagline">Where ideas take shape</p>
-                </div>
-                <div class="header-controls">
-                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                        <span class="theme-icon">🌙</span>
-                    </button>
-                </div>
-            </div>
+            <h1 class="logo">Minimal Blog</h1>
+            <p class="tagline">Simple thoughts, clearly expressed</p>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <span class="theme-icon">🌙</span>
+            </button>
         </header>
 
         <nav class="navigation">
-            <div class="nav-content">
-                <div class="nav-section">
-                    <h3 class="nav-title">
-                        <span class="nav-icon">🏷️</span>
-                        Filter by Tags
-                    </h3>
-                    <div class="tags-filter" id="tagsFilter">
-                        <button class="tag-btn active" data-tag="all">All Posts</button>
-                    </div>
-                </div>
-                <div class="nav-section">
-                    <button class="view-toggle" id="viewToggle">
-                        <span class="view-icon">⊞</span>
-                        <span id="viewToggleText">List View</span>
-                    </button>
+            <div class="nav-left">
+                <span class="filter-label">Filter:</span>
+                <div class="tags-filter" id="tagsFilter">
+                    <button class="tag-btn active" data-tag="all">all</button>
                 </div>
             </div>
+            <button class="view-toggle" id="viewToggle">
+                <span id="viewToggleText">list view</span>
+            </button>
         </nav>
 
         <main class="main">
@@ -61,12 +41,7 @@
         </main>
 
         <div class="post-view" id="postView" style="display: none;">
-            <div class="post-header">
-                <button class="back-btn" id="backBtn">
-                    <span class="back-icon">←</span>
-                    Back to Posts
-                </button>
-            </div>
+            <button class="back-btn" id="backBtn">← Back</button>
             <article class="post-content" id="postContent">
                 <!-- Individual post content -->
             </article>
