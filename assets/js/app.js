@@ -1,3 +1,5 @@
+// assets/js/app.js
+
 // --- CONFIGURATION ---
 const postsPerPage = 5; // Adjust this for how many posts to show per page
 const siteTitle = "My Awesome Blog";
@@ -8,7 +10,68 @@ const copyrightYear = document.getElementById('copyright-year');
 const themeToggle = document.getElementById('theme-toggle');
 
 // --- APP STATE ---
-let allPosts = postsData.sort((a, b) => new Date(b.date) - new Date(a.date));
+let allPosts = []; // Will be populated by fetching posts
+
+// --- NEW: PARSE FRONT-MATTER ---
+// Parses metadata (like title, date, tags) from the top of a Markdown file.
+function parseFrontMatter(markdown) {
+    const frontMatterRegex = /^---\s*([\s\S]*?)\s*---/;
+    const match = frontMatterRegex.exec(markdown);
+
+    if (!match) {
+        return { metadata: {}, content: markdown };
+    }
+
+    const frontMatterBlock = match[1];
+    const content = markdown.substring(match[0].length).trim();
+    const metadata = {};
+
+    frontMatterBlock.split('\n').forEach(line => {
+        const [key, ...valueParts] = line.split(':');
+        const value = valueParts.join(':').trim();
+        if (key && value) {
+            const cleanKey = key.trim();
+            // Specifically parse comma-separated tags into an array
+            if (cleanKey === 'tags') {
+                metadata[cleanKey] = value.split(',').map(tag => tag.trim());
+            } else {
+                metadata[cleanKey] = value;
+            }
+        }
+    });
+    return { metadata, content };
+}
+
+
+// --- NEW: LOAD POSTS ---
+// Fetches all post markdown files, parses them, and populates the `allPosts` array.
+async function loadAllPosts() {
+    const posts = [];
+    for (const file of postFiles) {
+        try {
+            const response = await fetch(`posts/${file}`);
+            if (!response.ok) throw new Error(`Could not load ${file}`);
+            
+            const markdown = await response.text();
+            const { metadata, content } = parseFrontMatter(markdown);
+            
+            // The slug is derived from the filename
+            metadata.slug = file.replace('.md', '');
+            
+            // Ensure tags is an array even if not specified in front-matter
+            if (!metadata.tags) {
+                metadata.tags = [];
+            }
+            
+            posts.push({ ...metadata, content });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    // Sort posts by date, newest first
+    allPosts = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
 
 // --- THEME ---
 function applyTheme(theme) {
@@ -46,7 +109,7 @@ function router() {
     }
 }
 
-// --- RENDER FUNCTIONS ---
+// --- RENDER FUNCTIONS (Mostly unchanged) ---
 function renderHomepage(page = 1) {
     const start = (page - 1) * postsPerPage;
     const end = start + postsPerPage;
@@ -169,17 +232,22 @@ function renderPagination(currentPage, totalPosts) {
 }
 
 // --- INITIALIZATION ---
-function init() {
+// Main function to initialize the blog
+async function main() {
     // Set copyright year
     copyrightYear.textContent = new Date().getFullYear();
 
     // Set initial theme
     const savedTheme = localStorage.getItem('theme') || 'dark-mode';
     applyTheme(savedTheme);
+    
+    // NEW: Wait for all posts to be loaded before setting up the router
+    await loadAllPosts();
 
-    // Listen for URL changes
+    // Listen for URL changes and route on initial load
     window.addEventListener('hashchange', router);
-    window.addEventListener('load', router);
+    router(); // Initial call to render content
 }
 
-init();
+// Start the application
+main();
