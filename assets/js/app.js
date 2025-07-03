@@ -47,6 +47,7 @@ function parseFrontMatter(markdown) {
 // Fetches all post markdown files, parses them, and populates the `allPosts` array.
 async function loadAllPosts() {
     const posts = [];
+
     for (const file of postFiles) {
         try {
             const response = await fetch(`posts/${file}`);
@@ -94,7 +95,7 @@ function router() {
     } else if (path.startsWith('/page/')) {
         const pageNum = parseInt(path.split('/')[2]);
         renderHomepage(pageNum);
-    } else if (path.startsWith('/post/')) {
+    } else if (path.startsWith('/posts/')) {
         const slug = path.split('/')[2];
         renderSinglePost(slug);
     } else if (path.startsWith('/tag/')) {
