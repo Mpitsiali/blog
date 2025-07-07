@@ -1,65 +1,23 @@
-// Blog configuration
+// Blog configuration 
+    // {
+    //   title: "Accessibility in Web Design",
+    //   date: "2023-12-20",
+    //   excerpt: "Making your websites accessible to everyone, including users with disabilities.",
+    //   file: "accessibility.md",
+    //   tags: ["accessibility", "design", "web-development"],
+    // },
 const BLOG_CONFIG = {
   postsPerPage: 8,
   posts: [
     {
-      title: "Welcome to My Blog",
-      date: "2024-01-15",
+      title: "first post",
+      date: "2025-07-07",
       excerpt:
-        "This is the first post on my new minimalist blog. Learn about the features and how to add new posts with tags and pagination.",
+        "my first attempt at writing a blog post.",
       file: "welcome.md",
-      tags: ["welcome", "tutorial", "blog"],
+      tags: ["vibe-coding", "writing"],
     },
-    {
-      title: "The Art of Minimalism",
-      date: "2024-01-10",
-      excerpt: "Exploring the principles of minimalist design and how it applies to web development and daily life.",
-      file: "minimalism.md",
-      tags: ["design", "minimalism", "philosophy"],
-    },
-    {
-      title: "Building with Vanilla JavaScript",
-      date: "2024-01-05",
-      excerpt:
-        "Why sometimes the best solution is the simplest one. A look at building modern web apps without frameworks.",
-      file: "vanilla-js.md",
-      tags: ["javascript", "web-development", "tutorial"],
-    },
-    {
-      title: "CSS Grid vs Flexbox",
-      date: "2024-01-03",
-      excerpt: "Understanding when to use CSS Grid and when to use Flexbox for your layouts.",
-      file: "css-grid-flexbox.md",
-      tags: ["css", "web-development", "layout"],
-    },
-    {
-      title: "Web Performance Tips",
-      date: "2024-01-01",
-      excerpt: "Simple techniques to make your websites faster and more efficient.",
-      file: "performance-tips.md",
-      tags: ["performance", "web-development", "optimization"],
-    },
-    {
-      title: "Responsive Design Principles",
-      date: "2023-12-28",
-      excerpt: "Creating websites that work beautifully on all devices and screen sizes.",
-      file: "responsive-design.md",
-      tags: ["design", "css", "responsive"],
-    },
-    {
-      title: "Git Workflow Best Practices",
-      date: "2023-12-25",
-      excerpt: "Organizing your Git workflow for better collaboration and code management.",
-      file: "git-workflow.md",
-      tags: ["git", "workflow", "development"],
-    },
-    {
-      title: "Accessibility in Web Design",
-      date: "2023-12-20",
-      excerpt: "Making your websites accessible to everyone, including users with disabilities.",
-      file: "accessibility.md",
-      tags: ["accessibility", "design", "web-development"],
-    },
+
   ],
 }
 

@@ -1,55 +1,18 @@
-# Welcome to My Minimalist Blog
+# First post
 
-Welcome to my new blog! This is a simple, elegant blogging platform built with vanilla HTML, CSS, and JavaScript. It's designed to be fast, accessible, and easy to maintain.
+I have always wanted to do this as a way to express some ideas. I do journal occasionally, however I am not active on social media and I don't share my thoughts or experiences. Sharing things can provide you with opportunities of all sorts, yet posting of social media is not appealing for me as my friends/followers are not likely interested, not to mention I will be cringe. I chose to host my blog on GitHub Pages. It's a quiet corner of the internet, away from the noise.
 
-## Features
 
-- **Minimalist Design**: Clean, distraction-free reading experience
-- **Dark/Light Theme**: Toggle between themes for comfortable reading
-- **Responsive Layout**: Looks great on all devices
-- **Markdown Support**: Write posts in simple Markdown format
-- **GitHub Pages Ready**: Deploy easily to GitHub Pages
+# Creating this site
+A vibe coded blog. Of course it was fast to create an initial blog site and it was impressive, until you find some small bugs here and there, or you decide you want to add a new feature, like tags and then all of the sudden the simple minimalist HTML/CSS/JS blog site that can be hosted in github pages becomes complex, that I will probably forget how to easily make new posts without breaking things and will not bother at all. Regardless I reached a decent outcome that I feel okay with, especially with the fact that I can switch from light to dark mode.
+<br>
 
-## How to Add New Posts
+# Yes, vibe coding makes things faster...
+... yet it also makes them slower. There are already some blogs regarding this topic that maybe you read about before, but this development cause me recently to exercise the brain further. Even the act of writing this blog fills me memories of writing essays in high school and actively trying to figure out how to write well and thing about the reader. It felt good. 
 
-Adding new posts is incredibly simple:
+<br>
+I am going to keep things simple and end it here for now.
 
-1. Create a new `.md` file in the `posts/` directory
-2. Write your content in Markdown format
-3. Add the post information to the `BLOG_CONFIG.posts` array in `script.js`
-4. Commit and push to GitHub Pages
 
-### Example Post Configuration
 
-\`\`\`javascript
-{
-    title: "Your Post Title",
-    date: "2024-01-15",
-    excerpt: "A brief description of your post that appears on the main page.",
-    file: "your-post-filename.md"
-}
-\`\`\`
 
-## Markdown Support
-
-This blog supports all standard Markdown features:
-
-- **Bold** and *italic* text
-- [Links](https://example.com)
-- `Inline code`
-- Lists and numbered lists
-- Blockquotes
-- Code blocks
-- Headers (H1-H6)
-
-> This is a blockquote example. Perfect for highlighting important information or quotes.
-
-## Getting Started
-
-1. Fork this repository
-2. Enable GitHub Pages in your repository settings
-3. Start writing your posts in the `posts/` directory
-4. Update the blog title and tagline in `index.html`
-5. Customize the styling in `styles.css` if desired
-
-Happy blogging! 🎉
