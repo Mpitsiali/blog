@@ -47,19 +47,38 @@ class MinimalBlog {
     this.setupEventListeners()
     this.initTheme()
     this.loadTags()
-    this.loadPosts()
+    this.handleLocationChange()
   }
 
   setupEventListeners() {
     this.themeToggle.addEventListener("click", () => this.toggleTheme())
     this.viewToggle.addEventListener("click", () => this.toggleView())
-    this.backBtn.addEventListener("click", () => this.showPostsList())
+    this.backBtn.addEventListener("click", () => history.back())
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && this.postView.style.display !== "none") {
-        this.showPostsList()
+        history.back()
       }
     })
+
+    window.addEventListener("popstate", () => this.handleLocationChange())
+  }
+  
+  handleLocationChange() {
+    const hash = window.location.hash
+    
+    if (hash.startsWith("#post/")) {
+        const postFile = hash.substring(6) // length of '#post/'
+        const post = BLOG_CONFIG.posts.find(p => p.file === postFile)
+        if (post) {
+            this.renderPost(post)
+        } else {
+            // If post not in config, just show the list
+            this.showPostsList() 
+        }
+    } else {
+        this.showPostsList()
+    }
   }
 
   loadTags() {
@@ -78,7 +97,6 @@ class MinimalBlog {
       ${tagsHTML}
     `
 
-    // Add event listeners to tag buttons
     this.tagsFilter.addEventListener("click", (e) => {
       if (e.target.classList.contains("tag-btn")) {
         this.filterByTag(e.target.dataset.tag)
@@ -90,12 +108,10 @@ class MinimalBlog {
     this.currentTag = tag
     this.currentPage = 1
 
-    // Update active tag button
     document.querySelectorAll(".tag-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.tag === tag)
     })
 
-    // Filter posts
     if (tag === "all") {
       this.filteredPosts = [...BLOG_CONFIG.posts]
     } else {
@@ -136,11 +152,10 @@ class MinimalBlog {
       </div>
     `
 
-    // Add click listeners to post items
     const postItems = document.querySelectorAll(".post-item, .post-card")
     postItems.forEach((item, index) => {
       const postIndex = startIndex + index
-      item.addEventListener("click", () => this.openPost(this.filteredPosts[postIndex]))
+      item.addEventListener("click", () => this.navigateToPost(this.filteredPosts[postIndex]))
     })
 
     this.loadPagination()
@@ -193,7 +208,6 @@ class MinimalBlog {
               onclick="blog.goToPage(${this.currentPage - 1})">‹</button>
     `
 
-    // Show page numbers
     for (let i = 1; i <= totalPages; i++) {
       if (i === 1 || i === totalPages || (i >= this.currentPage - 1 && i <= this.currentPage + 1)) {
         paginationHTML += `
@@ -228,9 +242,15 @@ class MinimalBlog {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  async openPost(post) {
+  navigateToPost(post) {
+      history.pushState({ postFile: post.file }, post.title, `#post/${post.file}`);
+      this.renderPost(post);
+  }
+
+  async renderPost(post) {
     this.showPostView()
     this.postContent.innerHTML = '<div class="loading">Loading...</div>'
+    document.title = `${post.title} | mpitsiali's blog`;
 
     try {
       const response = await fetch(`posts/${post.file}`)
@@ -266,7 +286,8 @@ class MinimalBlog {
     this.postView.style.display = "none"
     document.querySelector(".navigation").style.display = "flex"
     document.querySelector(".main").style.display = "block"
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    document.title = "mpitsiali's blog";
+    this.loadPosts();
   }
 
   initTheme() {
@@ -289,7 +310,6 @@ class MinimalBlog {
   }
 }
 
-// Initialize the blog when the page loads
 let blog
 document.addEventListener("DOMContentLoaded", () => {
   blog = new MinimalBlog()

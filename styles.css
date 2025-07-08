@@ -32,6 +32,7 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   transition: background-color 0.2s ease, color 0.2s ease;
+  text-transform: lowercase;
 }
 
 .container {
@@ -59,7 +60,26 @@ body {
   color: var(--text-muted);
   font-size: 1rem;
   font-weight: 300;
+}
+
+.social-links {
+  margin-top: 1rem;
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.social-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.social-link:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
 }
 
 .theme-toggle {
@@ -352,6 +372,7 @@ body {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.9rem;
   color: var(--accent-color);
+  text-transform: none;
 }
 
 .post-content pre {
@@ -361,6 +382,7 @@ body {
   overflow-x: auto;
   margin: 1.5rem 0;
   border: 1px solid var(--border-color);
+  text-transform: none;
 }
 
 .post-content pre code {
