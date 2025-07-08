@@ -10,9 +10,6 @@ A vibe coded blog. Of course it was fast to create an initial blog site and it w
 # Yes, vibe coding makes things faster...
 ... yet it also makes them slower. There are already some blogs regarding this topic that maybe you read about before, but this development cause me recently to exercise the brain further. Even the act of writing this blog fills me memories of writing essays in high school and actively trying to figure out how to write well and thing about the reader. It felt good. 
 
-<br>
-I am going to keep things simple and end it here for now.
-
 
 
 
